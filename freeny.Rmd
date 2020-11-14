@@ -1,0 +1,258 @@
+---
+title: "Codebook Demo - Freeny's Revenue Data"
+author: "Soo Chee Kiong, Ricky (17083991)"
+date: "November 12th, 2020"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A codebook shows the structure, contents and layout of data. We should always study the codebook to understand the variables before conducting any research on the data.
+
+The creation of codebook is demonstrated using Freeny’s Revenue Data in 2 ways - automated codebook and custom-made codebook.
+
+![Source: https://www.pexels.com](revenue.jpg)
+
+## 1. About The Data
+
+The Freeny's Revenue Data (freeny) is used in this demonstraton. The data consists of 39 observations showing quarterly revenue from 1962 2nd quarter to 1971 4th quarter. 
+
+The data originates from A. E. Freeny (1977) in *A Portable Linear Regression Package with Test Programs* by Bell Laboratories memorandum.
+
+However, it remains unknown how the author created or collected the data, and whether it is based on quarterly performance on a real or fictitious company, as well as the exact units used for the measurements (thousands, millions etc.)
+
+The data is included in the R Datasets package developed by R Core Team and contributors. The package also contains dozens of other datasets and is available in base R.
+
+For more on the data, check out https://rdrr.io/r/datasets/freeny.html
+
+## 2. Exploring Dataset
+
+### Loading Data
+
+Load the *memisc* package required to create automated codebook. The package name stands for "Management of Survey Data and Presentation of Analysis Results". The documentation can be found at https://cran.r-project.org/web/packages/memisc/memisc.pdf
+
+```{r}
+library(memisc)
+```
+
+Load the dataset.
+
+```{r}
+data("freeny")
+```
+
+### Showing Data
+
+Show the first few lines of the dataset.
+
+```{r}
+head(freeny)
+```
+
+View the dataset in the R Studio data viewer.
+
+```{r}
+View(freeny)
+```
+
+### Data Attributes
+
+Show the dimension of the dataset. 39 observations and 5 variables are found.
+
+```{r}
+dim(freeny)
+```
+
+Show the column names. It appears that y is the revenue, and the other 4 variables are the explanatory variables.
+
+```{r}
+names(freeny)
+```
+
+Show the row names of the dataset. It appears that each row represent a quarter of the period.
+
+```{r}
+row.names(freeny)
+```
+
+Show the attributes of the dataset.
+
+```{r}
+attributes(freeny)
+```
+
+### Variables in Data
+
+Based on the findings above and general knowledge in economics, a summary of the variables can be drawn up below.
+
+| Variable | Description | Units |
+| ----------- | ----------- | ----------- |
+| row.names | Quarter | Year & Quarter |
+| y | Quarterly revenue | $, possibly in million |
+| lag.quarterly.revenue | Quarterly revenue in last quarter | $, possibly in million |
+| price.index | Price index (possibly consumer price index) | Possibly % |
+| income.level | Income level | Unknown |
+| market.potential | Market potential | $, possibly in million |
+
+### Data Types
+
+Check the type of the dataset. It's found to be a list.
+
+```{r}
+typeof(freeny)
+```
+
+Check the class of the dataset. It's found to be a data frame.
+
+```{r}
+class(freeny)
+```
+
+## 3. Automated Codebook
+
+### Codebook Function
+
+The *codebook* function of the *memisc* package is used to automatically generate a codebook of a dataset. It shows the statistics of the dataset including minimum value, maximum value, mean, standard deviation, skewness and kurtosis of the data.
+
+```{r}
+codebook(freeny)
+```
+
+### Summary Function
+
+Show the summary statistics of all variables in the dataset.
+
+```{r}
+summary(freeny)
+```
+
+## 4. Custom-Made Codebook
+
+Instead of automatic generation of codebook, here the same information is shown by using individual R functions manually.
+
+### Data Types
+
+Show the type of each variable.
+
+```{r}
+sapply(freeny, typeof)
+```
+
+Show the class of each variable.
+
+```{r}
+sapply(freeny, class)
+```
+
+### Descriptive Statistics
+
+Show the mean of each column.
+
+```{r}
+sapply(freeny, mean)
+```
+
+Show the minimum value of each variable.
+
+```{r}
+sapply(freeny, min)
+```
+
+Show the maximum value of each variable.
+
+```{r}
+sapply(freeny, max)
+```
+
+Show the range of each variable.
+
+```{r}
+sapply(freeny, range)
+```
+
+Show the first quartile of each variable.
+
+```{r}
+sapply(freeny, quantile, 0.25)
+```
+
+Show the median of each variable.
+
+```{r}
+sapply(freeny, median)
+```
+
+Show the third quartile of each variable.
+
+```{r}
+sapply(freeny, quantile, 0.75)
+```
+
+Show the interquartile range of each variable.
+
+```{r}
+sapply(freeny, IQR)
+```
+
+Show the variance of each variable.
+
+```{r}
+sapply(freeny, var)
+```
+
+Show the standard deviation of each variable.
+
+```{r}
+sapply(freeny, sd)
+```
+
+The *moments* package is included to show skewness and kurtosis.
+
+```{r}
+# install.packages('moments') # Install the package if necessary
+library(moments)
+```
+
+Show the skewness of each variable.
+
+```{r}
+sapply(freeny, skewness)
+```
+
+
+Show the kurtosis of each variable.
+
+```{r}
+sapply(freeny, kurtosis)
+```
+
+### Visualizing Data
+
+Histograms are generated for all variables for data visualization.
+
+```{r}
+sapply(1:length(freeny), function (x) {
+  var_name <- names(freeny[x])
+  hist(freeny[[x]], main = paste0('Histogram - ', var_name), xlab = var_name, ylab = 'Frequency')
+})
+```
+
+Line plots are generated for all variables for data visualization.
+
+```{r}
+sapply(1:length(freeny), function (x) {
+  var_name <- names(freeny[x])
+  plot(row.names(freeny[x]), freeny[[x]], type = 'l', main = paste0('Line Plot - ', var_name), xlab = 'Quarter', ylab = var_name)
+})
+```
+
+
+
