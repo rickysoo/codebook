@@ -15,6 +15,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+GitHub - https://github.com/rickysoo/freeny  
+Contact - ricky [at] rickysoo.com
+
 A codebook shows the structure, contents and layout of data. We should always study the codebook to understand the variables before conducting any research on the data.
 
 The creation of codebook is demonstrated using Freeny’s Revenue Data in 2 ways - automated codebook and custom-made codebook.
